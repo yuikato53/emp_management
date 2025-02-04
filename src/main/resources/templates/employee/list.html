@@ -25,6 +25,7 @@
     <![endif]-->
   </head>
   <body>
+    
     <div class="container">
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -32,7 +33,7 @@
           <div class="navbar-header">
             <button
               type="button"
-              class="navbar-toggle collapsed"
+              class="navbar-toggle collapsed"  
               data-toggle="collapse"
               data-target="#bs-example-navbar-collapse-1"
               aria-expanded="false"
@@ -98,8 +99,17 @@
 
           <!-- ここにモックのtable要素を貼り付けます -->
 
+
+          <!-- ★追加分　ここから氏名検索要素 -->
           <table class="table table-striped">
             <thead>
+              <form th:action="@{/employee/search}" method="post">
+                <label for="search_name">名前：</label>
+                <input type="text" name="search_name">
+                <button type="submit">検索</button>
+              </form> 
+              <!-- ★追加分ここまで -->
+
               <tr>
                 <th>従業員名</th>
                 <th>入社日</th>
