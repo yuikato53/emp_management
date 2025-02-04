@@ -97,6 +97,8 @@ public class EmployeeController {
 	public String showDetail(String id, Model model) {
 		Employee employee = employeeService.showDetail(Integer.parseInt(id));
 		model.addAttribute("employee", employee);
+		String administratorName = (String) session.getAttribute("administratorName");
+		model.addAttribute("administratorName", administratorName); //commit6
 		return "employee/detail";
 	}
 
@@ -118,6 +120,8 @@ public class EmployeeController {
 		employee.setId(form.getIntId());
 		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
+		String administratorName = (String) session.getAttribute("administratorName");
+		model.addAttribute("administratorName", administratorName); //commit6
 		return "redirect:/employee/showList";
 	}
 }
