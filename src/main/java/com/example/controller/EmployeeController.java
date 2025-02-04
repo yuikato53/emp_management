@@ -2,6 +2,8 @@ package com.example.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.domain.Employee;
 import com.example.form.UpdateEmployeeForm;
 import com.example.service.EmployeeService;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,10 +36,10 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 
 	@Autowired 
-	private HttpSession session;
+	private HttpSession session;  //★管理者名表示時追加
 
 	/**
-	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
+	 * 使用するフォームオブジェクトをリクエストスコープに格納する
 	 * 
 	 * @return フォーム
 	 */
@@ -57,10 +61,27 @@ public class EmployeeController {
 	public String showList(Model model) {
 		List<Employee> employeeList = employeeService.showList();
 		String administratorName = (String) session.getAttribute("administratorName");
-		model.addAttribute("administratorName", administratorName);
+		model.addAttribute("administratorName", administratorName);  //管理者名の表示
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
+
+
+	//追加分　氏名検索
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+    
+	@PostMapping("/search")
+   public String searchEmployee (@RequestParam("search_name") String searchName, Model model){
+	 List<Employee> searchResult = employeeService.searchEmployeesByName(searchName);
+	 logger.info("検索結果のサイズ: " + searchResult.size());  // ヒットした件数をログ出力
+	 if (!searchResult.isEmpty()) {
+		model.addAttribute("employeeList", searchResult);
+	 }
+	return "employee/list";
+   }
+   //  model.addAttribute("employeeList", searchResult);
+
+
 
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員詳細を表示する
